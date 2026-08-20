@@ -10,16 +10,16 @@ int main() {
 
     cv::Mat frame;
 
-    bool read_ok = cap.read(frame);
+    while (true) {
+        cap.read(frame);
+        cv::imshow("Camera", frame);
 
-    std::cout << read_ok << std::endl;
-    std::cout << frame.empty() << std::endl;
-    std::cout << frame.rows << std::endl;
-    std::cout << frame.cols << std::endl;
-    std::cout << frame.channels() << std::endl;
+        int key = cv::waitKey(1);
 
-    cv::imshow("Camera Frame", frame);
-    cv::waitKey(0);
+        if (key == 27) {
+            break;
+        }
+    }
 
     return 0;
 }
