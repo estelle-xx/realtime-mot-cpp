@@ -11,7 +11,10 @@ int main() {
     cv::Mat frame;
 
     while (true) {
-        cap.read(frame);
+        if (!cap.read(frame)){
+            break;
+        }
+        
         cv::imshow("Camera", frame);
 
         int key = cv::waitKey(1);
