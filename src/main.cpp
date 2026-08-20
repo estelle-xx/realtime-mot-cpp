@@ -4,16 +4,22 @@
 int main() {
     std::cout << "Program started." << std::endl;
 
-    cv::Mat frame(2, 3, CV_8UC3, cv::Scalar(0, 0, 0));
-    frame.at<cv::Vec3b>(0, 0)[2] = 255;
-    cv::Vec3b pixel = frame.at<cv::Vec3b>(0, 0);
-    std::cout << static_cast<int>(pixel[0]) << std::endl;
-    std::cout << static_cast<int>(pixel[1]) << std::endl;
-    std::cout << static_cast<int>(pixel[2]) << std::endl;
+    std::string pipeline = "icamerasrc buffer-count=7 ! videoconvert ! appsink";
+    cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
+    std::cout << cap.isOpened() << std::endl;
+
+    cv::Mat frame;
+
+    bool read_ok = cap.read(frame);
+
+    std::cout << read_ok << std::endl;
     std::cout << frame.empty() << std::endl;
-    std::cout << frame.channels() << std::endl;
     std::cout << frame.rows << std::endl;
     std::cout << frame.cols << std::endl;
+    std::cout << frame.channels() << std::endl;
+
+    cv::imshow("Camera Frame", frame);
+    cv::waitKey(0);
 
     return 0;
 }
