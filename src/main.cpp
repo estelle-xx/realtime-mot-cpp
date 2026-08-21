@@ -1,13 +1,12 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include "core/VideoSource.hpp"
 
 int main() {
     std::cout << "Program started." << std::endl;
 
-    std::string pipeline = "icamerasrc buffer-count=7 ! videoconvert ! appsink";
-    cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
-    
-    if (!cap.isOpened()){
+    VideoSource camera;
+    if(!camera.open()) {
         std::cerr << "Failed to open camera." << std::endl;
         return 1;
     }
@@ -15,7 +14,7 @@ int main() {
     cv::Mat frame;
 
     while (true) {
-        if (!cap.read(frame)){
+        if (!camera.read(frame)){
             break;
         }
 
@@ -27,6 +26,9 @@ int main() {
             break;
         }
     }
+
+    camera.release();
+    cv::destroyAllWindows();
 
     return 0;
 }
