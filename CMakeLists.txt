@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(person_reid_system)
+project(realtime_mot_cpp)
 
 find_package(OpenCV REQUIRED)
 
-add_executable(person_reid_system 
+add_executable(realtime_mot 
     src/main.cpp
     src/core/VideoSource
     )
