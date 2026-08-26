@@ -6,9 +6,10 @@ find_package(OpenCV REQUIRED)
 
 add_executable(realtime_mot 
     src/main.cpp
-    src/core/VideoSource
+    src/core/VideoSource.cpp
+    src/detection/Detector.cpp
     )
 
-target_include_directories(person_reid_system PRIVATE include)
+target_include_directories(realtime_mot PRIVATE include)
 
-target_link_libraries(person_reid_system ${OpenCV_LIBS})
+target_link_libraries(realtime_mot ${OpenCV_LIBS})
