@@ -1,3 +1,9 @@
 person_reid_system
 
 build/
+
+.venv/
+
+models/*.pt
+
+models/*.onnx

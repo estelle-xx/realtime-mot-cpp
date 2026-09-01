@@ -1,5 +1,9 @@
 #include "detection/Detector.hpp"
 
+Detector::Detector(const std::string& model_path) {
+    net_ = cv::dnn::readNetFromONNX(model_path);
+}
+
 std::vector<Detection> Detector::detect(const cv::Mat& frame) {
     std::vector<Detection> detections;
 

@@ -8,13 +8,14 @@
 int main() {
     std::cout << "Program started." << std::endl;
 
+    Detector detector("models/yolo11n.onnx");
+
     VideoSource camera;
+    
     if(!camera.open()) {
         std::cerr << "Failed to open camera." << std::endl;
         return 1;
     }
-
-    Detector detector;
 
     cv::Mat frame;
     std::vector<Detection> detections;
