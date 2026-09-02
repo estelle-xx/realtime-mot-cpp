@@ -4,6 +4,36 @@
 #include <vector>
 #include "detection/Detection.hpp"
 #include "detection/Detector.hpp"
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+std::string getClassName(int class_id) {
+    switch (class_id) {
+        case 0: return "person";
+        case 1: return "bicycle";
+        case 2: return "car";
+        case 3: return "motorcycle";
+        case 5: return "bus";
+        case 7: return "truck";
+        default: return "other";
+    }
+}
+
+bool isTrackingTarget(int class_id) {
+        switch (class_id) {
+            case 0:  // person
+            case 1:  // bicycle
+            case 2:  // car
+            case 3:  // motorcycle
+            case 5:  // bus
+            case 7:  // truck
+                return true;
+
+            default:
+                return false;
+        }
+    }
 
 int main() {
     std::cout << "Program started." << std::endl;
@@ -11,42 +41,25 @@ int main() {
     Detector detector("models/yolo11n.onnx");
 
     VideoSource camera;
-    
+
     if(!camera.open()) {
         std::cerr << "Failed to open camera." << std::endl;
         return 1;
     }
 
     cv::Mat frame;
-    std::vector<Detection> detections;
-
-    Detection detection;
-    Detection detection2;
-
-    detection.bbox = cv::Rect2f(100.0f, 200.0f, 80.0f, 160.0f);
-    detection.confidence = 0.92f;
-    detection.class_id = 0;
-
-    detection2.bbox = cv::Rect2f(300.0f, 150.0f, 100.0f, 200.0f);
-    detection2.confidence = 0.87f;
-    detection2.class_id = 0;
-
-    detections.push_back(detection);
-    detections.push_back(detection2);
-
-    std::cout << "detections size: " << detections.size() << std::endl;
-    
-    for (const Detection& detection : detections) {
-        std::cout << "confidence: " << detection.confidence << std::endl;
-    }
     
     while (true) {
         if (!camera.read(frame)){
             break;
         }
         std::vector<Detection> detections = detector.detect(frame);
-        std::cout << "detections size: " << detections.size() << std::endl;
+
         for (const Detection& detection : detections) {
+            if (!isTrackingTarget(detection.class_id)) {
+                continue;
+            }
+
             cv::rectangle(
                 frame,
                 detection.bbox,
@@ -54,7 +67,11 @@ int main() {
                 2
             );
 
-            std::string label = std::to_string(detection.confidence);
+            std::ostringstream label_stream;
+
+            label_stream << getClassName(detection.class_id) << " " << std::fixed << std::setprecision(2) << detection.confidence;
+
+            std::string label = label_stream.str();
 
             cv::putText(
                 frame,
