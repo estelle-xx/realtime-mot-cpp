@@ -1,3 +1,5 @@
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 cmake_minimum_required(VERSION 3.16)
 
 project(realtime_mot_cpp)
@@ -8,6 +10,7 @@ add_executable(realtime_mot
     src/main.cpp
     src/core/VideoSource.cpp
     src/detection/Detector.cpp
+    src/tracking/Tracker.cpp
     )
 
 target_include_directories(realtime_mot PRIVATE include)
